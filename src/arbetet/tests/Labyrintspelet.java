@@ -1,4 +1,4 @@
-package tests;
+package arbetet.tests;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;

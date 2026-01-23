@@ -1,9 +1,9 @@
-package tests;
+package arbetet.tests;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class TestTimer {
+public class FirstEditionLabyrintGrafik {
     public static void main(String[] args) {
         int bredd = 11;
         JFrame frame = new JFrame();
