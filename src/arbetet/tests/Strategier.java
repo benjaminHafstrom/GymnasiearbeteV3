@@ -32,7 +32,7 @@ public class Strategier extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String valt = (String) strategiComboBox.getSelectedItem();
-                körProgramm(valt);
+                körProgram(valt);
             }
         });
     }
