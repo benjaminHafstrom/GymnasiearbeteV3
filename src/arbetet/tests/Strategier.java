@@ -48,7 +48,7 @@ public class Strategier extends JPanel {
             case "See hela labyrinten":
                 körStartOchMål();
                 break;
-            case "Sparar och kollar korsningar":
+            case "Spara och kolla korsningar":
                 körKorsningar();
                 break;
             case "ignorera vägar":
