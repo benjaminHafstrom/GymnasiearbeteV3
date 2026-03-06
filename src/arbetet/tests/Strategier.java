@@ -18,11 +18,10 @@ public class Strategier extends JPanel {
                 "Välj strategi...",
                 "Random(men ej bakåt)",
                 "Håller sig till en väg",
-                "Titta start och mål",
-                "Kolla varje korsning",
-                "Gå mot mål",
-                "räkna rutor",
-                "ignorera vägar"
+                "See hela labyrinten",
+                "Spara och kolla korsningar",
+                "ignorera vägar",
+                "Räkna rutor till mål",
         };
 
         strategiComboBox = new JComboBox<>(strategier);
