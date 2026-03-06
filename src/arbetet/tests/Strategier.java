@@ -37,7 +37,7 @@ public class Strategier extends JPanel {
         });
     }
 
-    private void körProgramm(String strategi) {
+    private void körProgram(String strategi) {
         switch (strategi) {
             case "Random(men ej bakåt)":
                 körRandom();
