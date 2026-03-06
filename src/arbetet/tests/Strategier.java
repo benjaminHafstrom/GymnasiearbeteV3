@@ -16,7 +16,7 @@ public class Strategier extends JPanel {
         // Alternativen i comboboxen
         String[] strategier = {
                 "Välj strategi...",
-                "Random",
+                "Random(men ej bakåt)",
                 "Håller sig till en väg",
                 "Titta start och mål",
                 "Kolla varje korsning",
