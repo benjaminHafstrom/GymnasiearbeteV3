@@ -3,6 +3,7 @@ package arbetet.tests;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.LinkedList;
 
 
 public class LabyrintPlayField extends JPanel {
@@ -12,10 +13,9 @@ public class LabyrintPlayField extends JPanel {
     static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private boolean[][] vertikalaVäggar = new boolean[rutorPerRad][rutorPerRad];
     private boolean[][] horisontellaVäggar = new boolean[rutorPerRad][rutorPerRad];
-    private int vertikalMålPosition = (((int) ((Math.random()*rutorPerRad/2)+(rutorPerRad/2)))*längdSida);
-    private int horisontellMålPosition = (((int) ((Math.random()*rutorPerRad/2)+(rutorPerRad/2)))*längdSida);
-    private int nuvarandeXPosition = 10;
-    private int nuvarandeYPosition = 10;
+    private LinkedList<Point> pointlista = new LinkedList<>();
+
+
 
     public static void main(String[] args) {
         System.out.println("Height - " + screenSize.height);
@@ -38,18 +38,85 @@ public class LabyrintPlayField extends JPanel {
 
 
     }
+    public LinkedList skapaPointLista(){
+        pointlista.add(new Point(0,0));
+        Point nu = pointlista.get(0);
+        Point förra = null;
+        int tillbakaKaka = -1;
+        while (nu.y< rutorPerRad -1) {
+            int x = nu.x;
+            int y = nu.y;
+            int vilketHåll = (int) (Math.random()*30);
+            Point p;
+            if (vilketHåll<9){
+                if (tillbakaKaka==2) continue;
+                p = new Point(nu.x, nu.y+1);
+                tillbakaKaka = 0;
+            }
+            else if (vilketHåll<14 && vilketHåll>=9 ){
+                if (y==0) continue;
+                if (tillbakaKaka==3) continue;
+                p = new Point(nu.x, nu.y-1);
+                tillbakaKaka = 1;
+            }
+            else if (vilketHåll<24 && vilketHåll>=14){
+                if (x== rutorPerRad -1) continue;
+                if (tillbakaKaka==0) continue;
+                p = new Point(nu.x+1, nu.y);
+                tillbakaKaka = 2;
+            }
+            else{
+                if (x==0) continue;
+                if (tillbakaKaka==1) continue;
+                p = new Point(nu.x-1, nu.y);
+                tillbakaKaka = 3;
+            }
+            if (p.equals(förra)) continue;
+            pointlista.add(p);
+            förra = nu;
+            nu = p;
+        }
+        System.out.println("rutor till slut: " + pointlista.size());
+        return pointlista;
+    }
+
+    public void konverteraPointListanTillDubbelarrayer(){
+        for (int i = 0; i < pointlista.size() - 1; i++) {
+
+            Point a = pointlista.get(i);
+            Point b = pointlista.get(i + 1);
+
+            int skillnadX = b.x - a.x;
+            int skillnadY = b.y - a.y;
+
+            if (skillnadX == 1) { // höger
+                vertikalaVäggar[a.y][a.x] = false;
+            }
+            else if (skillnadX == -1) { // vänster
+                vertikalaVäggar[b.y][b.x] = false;
+            }
+            else if (skillnadY == 1) { // ner
+                horisontellaVäggar[a.y][a.x] = false;
+            }
+            else if (skillnadY == -1) { // upp
+                horisontellaVäggar[b.y][b.x] = false;
+            }
+        }
+    }
 
     public LabyrintPlayField() {
+        skapaPointLista();
         horisontellVäggEllerEj();
         vertikalVäggEllerEj();
+        konverteraPointListanTillDubbelarrayer();
     }
 
     public boolean[][] vertikalVäggEllerEj() {
         for (int i = 0; i < rutorPerRad; i++) {
             for (int j = 0; j < rutorPerRad; j++) {
-                int a = (int) (Math.random()*2);
-                if (a==1) vertikalaVäggar[i][j] = true;
-                if (a==0) vertikalaVäggar[i][j] = false;
+                int a = (int) (Math.random()*5);
+                if (a>=1) vertikalaVäggar[i][j] = true;
+                if (a<=1 && a>=0) vertikalaVäggar[i][j] = false;
             }
         }
 
@@ -60,76 +127,14 @@ public class LabyrintPlayField extends JPanel {
     public boolean[][] horisontellVäggEllerEj() {
         for (int i = 0; i < rutorPerRad; i++) {
             for (int j = 0; j < rutorPerRad; j++) {
-                int a = (int) (Math.random()*2);
-                if (a==1) horisontellaVäggar[i][j] = true;
-                if (a==0) horisontellaVäggar[i][j] = false;
+                int a = (int) (Math.random()*5);
+                if (a>=1) horisontellaVäggar[i][j] = true;
+                if (a<=1 && a>=0) horisontellaVäggar[i][j] = false;
             }
         }
         return horisontellaVäggar;
     }
-    public boolean[][] generaVägTillMål(){
-        if (nuvarandeXPosition == 10) {
-            if (nuvarandeYPosition == 10) {
-                int nerEllerHöger = (int) (Math.random() * 2);
-                if (nerEllerHöger == 0) nuvarandeYPosition += längdSida;//ner
-                if (nerEllerHöger == 1) nuvarandeXPosition += längdSida;//höger
-            }
-            else {
-                int uppNerEllerHöger = (int) (Math.random() * 3);
-                if (uppNerEllerHöger == 0) nuvarandeYPosition -= längdSida;//upp
-                if (uppNerEllerHöger == 1) nuvarandeYPosition += längdSida;//ner
-                if (uppNerEllerHöger == 2) nuvarandeXPosition += längdSida;//höger
-            }
-        }
-        if (nuvarandeXPosition == storlekLabyrint-10){
-            if (nuvarandeYPosition == 10){
-                int nerEllerVänster = (int)(Math.random()*2);
-                if (nerEllerVänster ==0) nuvarandeYPosition+=längdSida;//ner
-                if (nerEllerVänster ==1) nuvarandeXPosition-=längdSida;//vänster
-            }
-            else {
-                int uppNerEllerVänster = (int) (Math.random() * 3);
-                if (uppNerEllerVänster == 0) nuvarandeYPosition -= längdSida;//upp
-                if (uppNerEllerVänster == 1) nuvarandeYPosition += längdSida;//ner
-                if (uppNerEllerVänster == 2) nuvarandeXPosition -= längdSida;//vänster
-            }
-        }
-        if (nuvarandeXPosition == 10) {
-            if (nuvarandeYPosition == storlekLabyrint - 10) {
-                int uppEllerHöger = (int) (Math.random() * 2);
-                if (uppEllerHöger == 0) nuvarandeYPosition -= längdSida;//upp
-                if (uppEllerHöger == 1) nuvarandeXPosition += längdSida;//höger
-            }
-            else {
-                int uppHögerEllerVänster = (int) (Math.random() * 3);
-                if (uppHögerEllerVänster == 0) nuvarandeYPosition -= längdSida;//upp
-                if (uppHögerEllerVänster == 1) nuvarandeXPosition += längdSida;//höger
-                if (uppHögerEllerVänster == 2) nuvarandeXPosition -= längdSida;//vänster
-            }
-        }
-        if (nuvarandeXPosition == storlekLabyrint-10) {
-            if (nuvarandeYPosition == storlekLabyrint - 10) {
-                int uppEllerVänster = (int) (Math.random() * 2);
-                if (uppEllerVänster == 0) nuvarandeYPosition -= längdSida;//upp
-                if (uppEllerVänster == 1) nuvarandeXPosition -= längdSida;//vänster
-            }
-            else {
-                int nerHögerEllerVänster = (int) (Math.random() * 3);
-                if (nerHögerEllerVänster == 0) nuvarandeYPosition += längdSida;//ner
-                if (nerHögerEllerVänster == 1) nuvarandeXPosition += längdSida;//höger
-                if (nerHögerEllerVänster == 2) nuvarandeXPosition -= längdSida;//vänster
-            }
-        }
-        else {
-            int allaRiktningar = (int) (Math.random() * 4);
-            if (allaRiktningar == 0) nuvarandeXPosition += längdSida;//höger
-            if (allaRiktningar == 1) nuvarandeXPosition -= längdSida;//vänster
-            if (allaRiktningar == 2) nuvarandeYPosition += längdSida;//ner
-            if (allaRiktningar == 3) nuvarandeYPosition -= längdSida;//upp
 
-        }
-                return vertikalaVäggar;
-    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -137,19 +142,19 @@ public class LabyrintPlayField extends JPanel {
         g.setColor(Color.green);
         g.fillRect(0,0,längdSida,längdSida);
         g.setColor(Color.yellow);
-        g.fillRect(vertikalMålPosition,horisontellMålPosition,längdSida,längdSida);
+        g.fillRect(pointlista.get(pointlista.size()-2).x*längdSida,pointlista.get(pointlista.size()-2).y*längdSida,längdSida,längdSida);
         g.setColor(Color.BLACK);
         for (int j = 0; j < rutorPerRad; j++) {
             for (int k = 0; k < rutorPerRad; k++) {
-                if (horisontellaVäggar[j][k]==true) {
-                    g.fillRect( ((j)*längdSida),((k)*längdSida),4,längdSida);
+                if (horisontellaVäggar[k][j]==true) {
+                    g.fillRect( ((k)*längdSida),((j)*längdSida),längdSida,4);
                 }
             }
         }
         for (int j = 0; j < rutorPerRad; j++) {
             for (int k = 0; k < rutorPerRad; k++) {
-                if (vertikalaVäggar[j][k]==true) {
-                    g.fillRect( ((j)*längdSida),((k)*längdSida),längdSida,4);
+                if (vertikalaVäggar[k][j]==true) {
+                    g.fillRect( ((k)*längdSida),((j)*längdSida),4,längdSida);
                 }
 
             }
