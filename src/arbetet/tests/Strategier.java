@@ -16,13 +16,12 @@ public class Strategier extends JPanel {
         // Alternativen i comboboxen
         String[] strategier = {
                 "Välj strategi...",
-                "Random",
+                "Random(men ej bakåt)",
                 "Håller sig till en väg",
-                "Titta start och mål",
-                "Kolla varje korsning",
-                "Gå mot mål",
-                "räkna rutor",
-                "ignorera vägar"
+                "See hela labyrinten",
+                "Spara och kolla korsningar",
+                "ignorera vägar",
+                "Räkna rutor till mål",
         };
 
         strategiComboBox = new JComboBox<>(strategier);
@@ -33,12 +32,12 @@ public class Strategier extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String valt = (String) strategiComboBox.getSelectedItem();
-                körProgramm(valt);
+                körProgram(valt);
             }
         });
     }
 
-    private void körProgramm(String strategi) {
+    private void körProgram(String strategi) {
         switch (strategi) {
             case "Random(men ej bakåt)":
                 körRandom();
@@ -49,7 +48,7 @@ public class Strategier extends JPanel {
             case "See hela labyrinten":
                 körStartOchMål();
                 break;
-            case "Sparar och kollar korsningar":
+            case "Spara och kolla korsningar":
                 körKorsningar();
                 break;
             case "ignorera vägar":
