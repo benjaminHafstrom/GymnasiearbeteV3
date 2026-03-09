@@ -90,17 +90,15 @@ public class LabyrintPlayField extends JPanel {
             int skillnadY = b.y - a.y;
 
             if (skillnadX == 1) { // höger
-                vertikalaVäggar[a.y][a.x] = false;
+                vertikalaVäggar[b.x][b.y] = false;
+            } else if (skillnadX == -1) { // vänster
+                vertikalaVäggar[a.x][a.y] = false;
+            } else if (skillnadY == 1) { // ner
+                horisontellaVäggar[b.x][b.y] = false;
+            } else if (skillnadY == -1) { // upp
+                horisontellaVäggar[a.x][a.y] = false;
             }
-            else if (skillnadX == -1) { // vänster
-                vertikalaVäggar[b.y][b.x] = false;
-            }
-            else if (skillnadY == 1) { // ner
-                horisontellaVäggar[a.y][a.x] = false;
-            }
-            else if (skillnadY == -1) { // upp
-                horisontellaVäggar[b.y][b.x] = false;
-            }
+
         }
     }
 
@@ -142,19 +140,19 @@ public class LabyrintPlayField extends JPanel {
         g.setColor(Color.green);
         g.fillRect(0,0,längdSida,längdSida);
         g.setColor(Color.yellow);
-        g.fillRect(pointlista.get(pointlista.size()-2).x*längdSida,pointlista.get(pointlista.size()-2).y*längdSida,längdSida,längdSida);
+        g.fillRect(pointlista.get(pointlista.size()-1).x*längdSida,pointlista.get(pointlista.size()-1).y*längdSida,längdSida,längdSida);
         g.setColor(Color.BLACK);
         for (int j = 0; j < rutorPerRad; j++) {
             for (int k = 0; k < rutorPerRad; k++) {
-                if (horisontellaVäggar[k][j]==true) {
-                    g.fillRect( ((k)*längdSida),((j)*längdSida),längdSida,4);
+                if (horisontellaVäggar[j][k]==true) {
+                    g.fillRect( ((j)*längdSida),((k)*längdSida),längdSida,4);
                 }
             }
         }
         for (int j = 0; j < rutorPerRad; j++) {
             for (int k = 0; k < rutorPerRad; k++) {
-                if (vertikalaVäggar[k][j]==true) {
-                    g.fillRect( ((k)*längdSida),((j)*längdSida),4,längdSida);
+                if (vertikalaVäggar[j][k]==true) {
+                    g.fillRect( ((j)*längdSida),((k)*längdSida),4,längdSida);
                 }
 
             }
