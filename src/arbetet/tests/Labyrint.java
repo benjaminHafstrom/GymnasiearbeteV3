@@ -8,14 +8,19 @@ public class Labyrint {
     private Labyrint() {
         JFrame frame = new JFrame();
         frame.setLayout(new BorderLayout());
-        JLabel header = new JLabel("Labyrint 16x16");
-        header.setFont(new Font("monospaced", Font.PLAIN,75));
+
+        JLabel header = new JLabel("Labyrint 16x16", SwingConstants.CENTER);
+        header.setFont(new Font("monospaced", Font.PLAIN, 40));
         header.setForeground(Color.blue);
         frame.add(header, BorderLayout.NORTH);
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
-        frame.add(new Strategier());
 
+        LabyrintPlayField labyrinten = new LabyrintPlayField();
+        labyrinten.setPreferredSize(new Dimension(640, 640));
+        frame.add(labyrinten, BorderLayout.CENTER);
+
+        Strategier strategipanel = new Strategier(labyrinten);
+        strategipanel.setPreferredSize(new Dimension(200, 640));
+        frame.add(strategipanel, BorderLayout.EAST);
 
         frame.pack();
         frame.setLocationRelativeTo(null);

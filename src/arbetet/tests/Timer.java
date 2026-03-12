@@ -1,67 +1,59 @@
 package arbetet.tests;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class Timer {
-    private  int milliSekund = 0;
+    private int milliSekund = 0;
     private int sekund = 0;
     private int minut = 0;
     private boolean timerStatus = false;
     private javax.swing.Timer timer;
+    private JLabel label;
 
+    public Timer(JLabel label) {
+        this.label = label;
+        // 10ms ger en mjuk och exakt visning i GUI:et
+        this.timer = new javax.swing.Timer(10, e -> UppdateraTid());
+    }
 
-
-    public Timer() { timer = new javax.swing.Timer(1, e-> UppdateraTid()); }
-
-    public void start(){
+    public void start() {
         if (!timerStatus) {
-            timerStatus = true;
             timer.start();
+            timerStatus = true;
         }
     }
-    public void stop(){
-        if (timerStatus) {
-            timerStatus = false;
-            timer.stop();
-        }
-    }
-    public void reset(){
-        if (timerStatus) {
-            timer.stop();
-            milliSekund = 0;
-            sekund = 0;
-            minut = 0;
 
-        }
+    public void stop() {
+        timer.stop();
+        timerStatus = false;
     }
-    private void UppdateraTid (){
-        milliSekund++;
+
+    public void reset() {
+        timer.stop();
+        milliSekund = 0;
+        sekund = 0;
+        minut = 0;
+        timerStatus = false;
+        uppdateraLabel();
+    }
+
+    private void UppdateraTid() {
+        milliSekund += 10;
         if (milliSekund >= 1000) {
             milliSekund = 0;
             sekund++;
         }
         if (sekund >= 60) {
-            sekund =  0;
+            sekund = 0;
             minut++;
         }
+        uppdateraLabel();
     }
 
-    @Override
-    public String toString() {
-        return String.format("%1$d, %2$d, %3$d", minut, sekund, milliSekund);
-    }
-
-    public static void main(String[] args) {
-        Timer a = new Timer();
-        JFrame frame = new JFrame();
-        JPanel panel = new JPanel();
-        FlowLayout flowlayout = new FlowLayout();
-        frame.setLayout(flowlayout);
-        frame.add(panel);
-        frame.pack();
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
+    private void uppdateraLabel() {
+        if (label != null) {
+            // %02d betyder att det alltid visas minst två siffror (t.ex. 05 istället för 5)
+            label.setText(String.format("Tid: %02d:%02d:%03d", minut, sekund, milliSekund));
+        }
     }
 }
